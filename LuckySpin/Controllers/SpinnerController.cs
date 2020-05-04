@@ -18,10 +18,11 @@ namespace LuckySpin.Controllers
         /***
          * Controller Constructor with Dependency Injection of a SpinRepository object
          */
-        public SpinnerController(SpinRepository r) //TODO also inject a ISpinService object
+        public SpinnerController(SpinRepository r, ISpinService ss) //TODO also inject a ISpinService object
         {
             spinRepository = r;
             //TODO: assign the spinService property the injected value
+            spinService = ss;
         }
 
         /***

@@ -18,7 +18,7 @@ namespace LuckySpin
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddSingleton<SpinRepository>();
+            services.AddSingleton<ISpinRepository, SpinRepository>();
             //TODO: register the SpinService class with a type of ISpinService
             services.AddTransient<ISpinService, SpinService>();
         }
