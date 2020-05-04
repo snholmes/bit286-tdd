@@ -1,0 +1,26 @@
+﻿@model IEnumerable<LuckySpin.Models.Spin>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+    int count = 0;
+}
+<h1>Out of Luck</h1>
+<table>
+    <thead><tr><th>Spin</th><th>Result</th><th>Average Wins</th></tr></thead>
+    <tbody>
+        @foreach (LuckySpin.Models.Spin spin in @Model)
+        {
+            count++;
+            var result = (spin.IsWinning) ? "Win" : "Lose";
+            <tr @if (spin.IsWinning)
+                {<text> style='background-color:lightgreen;' </text> }
+                >
+                <td>@count</td>
+                <td>@result</td>
+                <td>@spin.averageWins</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!-- A link to Play Again -->
+@Html.ActionLink("Play Again", "Index")
