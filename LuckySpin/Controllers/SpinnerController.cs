@@ -38,14 +38,13 @@ namespace LuckySpin.Controllers
         [HttpPost]
         public IActionResult Index(Player player)
         {
-            if (ModelState.IsValid) {
-                //Save the current player in the repository
-                spinRepository.CurrentPlayer = player;
-                spinRepository.CurrentPlayer.AddCredit(player.StartingBalance);
-                return RedirectToAction("SpinIt");
-            }
+            if (!ModelState.IsValid) { return View(); }
 
-            return View();
+            player.AddCredit(player.StartingBalance);
+
+         //Save the current player in the repository
+            spinRepository.AddPlayer( player );
+            return RedirectToAction("SpinIt");         
         }
 
         /***
@@ -55,23 +54,13 @@ namespace LuckySpin.Controllers
          public IActionResult SpinIt(int luck) //use the repository value
         {
             //Check if enough balance to play, if not drop out to LuckList
-            if (!spinRepository.CurrentPlayer.ChargeSpin())
+            if (!spinRepository.ChargePlayer())
             {
                 return RedirectToAction("LuckList");
             }
 
             //Create the current Spin
-            Spin spin = new Spin
-            {
-                Luck = luck > 0 ? luck : spinRepository.CurrentPlayer.Luck,
-                A = random.Next(1, 10),
-                B = random.Next(1, 10),
-                C = random.Next(1, 10)
-            };
-            spin.IsWinning = (spin.A == spin.Luck || spin.B == spin.Luck || spin.C == spin.Luck);
-
-            //Use the service to compute the average wins
-            spin.averageWins = spinService.averageWins();
+            Spin spin = new Spin();
 
             //Add to Spin Repository
             spinRepository.AddSpin(spin);
@@ -80,14 +69,16 @@ namespace LuckySpin.Controllers
             if (spin.IsWinning)
             {
                 ViewBag.Display = "block";
-                spinRepository.CurrentPlayer.CollectWinnings();
+                spinRepository.CollectWinnings();
             }
             else
                 ViewBag.Display = "none";
 
-            ViewBag.FirstName = spinRepository.CurrentPlayer.FirstName;
-            ViewBag.Balance = spinRepository.CurrentPlayer.Balance;
+            
+            ViewBag.Balance = spinRepository.GetBalance();
 
+            //Use the service to compute the average wins
+            spin.averageWins = spinService.averageWins();
             return View("SpinIt", spin);
         }
 
@@ -98,7 +89,7 @@ namespace LuckySpin.Controllers
          public IActionResult LuckList()
         {
             ViewBag.Balance = 0;
-            return View(spinRepository.PlayerSpins);
+            return View(spinRepository.GetSpins());
         }
 
     }

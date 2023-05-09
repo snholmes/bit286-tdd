@@ -3,11 +3,27 @@ namespace LuckySpin.Models
 {
     public class Spin
     {
-        public int A { get; set; }
-        public int B { get; set; }
-        public int C { get; set; }
-        public int Luck { get; set; }
-        public Boolean IsWinning { get; set; }
+        Random random = new Random();
+        private int[] numbers; //a spin array;
+
+        //Constructor
+        public Spin()
+        {
+            numbers = new int[] { random.Next(10), random.Next(10), random.Next(10) };
+        }
+
+        //Spin Properties
+        public int[] Numbers //Read only - the spin numbers are set in the constructor
+        {
+            get { return numbers; }
+        }
+
+        public bool IsWinning //Read only - true if Player's Luck is one of the numbers
+        {
+            get { return numbers.Contains(Player.Luck); }
+        }
+
+        public Player Player { get; set; }
         public double averageWins { get; set; }
     }
 }

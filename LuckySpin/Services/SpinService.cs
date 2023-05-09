@@ -1,4 +1,5 @@
 ﻿using System;
+using LuckySpin.Models;
 using LuckySpin.Repositories;
 namespace LuckySpin.Services
 {
@@ -14,7 +15,16 @@ namespace LuckySpin.Services
 
         public double averageWins()
         {
-            return 2.0;
+            
+            IEnumerable<Spin> spins = spinRepository.GetSpins();
+            int wins = 0;
+            double count = 0;
+            foreach (Spin s in spins) {
+                if (s.IsWinning) { wins++; }
+                count++;
+            }
+
+            return wins/count;
         }
 
         //TODO Add and implement the method from the Interface
