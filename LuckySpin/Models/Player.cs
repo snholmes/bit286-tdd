@@ -1,15 +1,14 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 namespace LuckySpin.Models
 {
     public class Player
     {
         private Decimal _balance = 0;
 
-        [Required(ErrorMessage ="Please enter your Name")]
+        [Required(ErrorMessage = "Please enter your Name")]
         public string FirstName { get; set; }
 
-        [Range(1,9, ErrorMessage = "Choose a number")]
+        [Range(1, 9, ErrorMessage = "Choose a number")]
         public int Luck { get; set; }
 
         [Display(Prompt = "Starting Balance in $$")]
@@ -22,15 +21,22 @@ namespace LuckySpin.Models
             get { return _balance; }
         }
 
-        
+
         public void AddCredit(Decimal b)
         {
             _balance += b;
         }
         public bool ChargeSpin()
         {
-
-            return false;
+            Boolean goAhead;
+            if (_balance >= 0.5m && _balance < 100m)
+            {
+                _balance -= .5m;
+                goAhead = true;
+                return goAhead;
+            }
+            goAhead = false;
+            return goAhead;
         }
         public void CollectWinnings()
         {
