@@ -29,11 +29,7 @@ namespace LuckySpin.Models
         }
         public bool ChargeSpin()
         {
-            if (_balance >= 0.50m)
-            {
-                _balance -= 0.50m;
-                return true;
-            }
+
             return false;
         }
         public void CollectWinnings()

@@ -27,8 +27,6 @@ namespace LuckySpin.Repositories
             return currentPlayer.Balance;
         }
         
-
-        //Interaction method
         public void AddSpin(Spin s)
         {
             s.Player = currentPlayer;
@@ -40,5 +38,7 @@ namespace LuckySpin.Repositories
         {
             currentPlayer.CollectWinnings();
         }
+
+        //TODO: Create Average Spin
     }
 }
