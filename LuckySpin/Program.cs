@@ -1,26 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using LuckySpin.Repositories;
+using LuckySpin.Services;
 
-namespace LuckySpin
-{
-    public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+//Enable MVC and DIJ Services for this application
+builder.Services.AddMvc();
+builder.Services.AddSingleton<ISpinRepository, SpinRepository>();
+            //TODO: register the SpinService class with a type of ISpinService
+builder.Services.AddTransient<ISpinService, SpinService>();
+var app = builder.Build();
+
+
+/* Middleware in the HTTP Request Pipeline
+ */
+app.UseStaticFiles();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller}/{action}/{luck:int?}",
+    defaults: new
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        controller = "Spinner",
+        action = "Index"
+    });
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
-}
+app.Run();

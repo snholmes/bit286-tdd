@@ -6,6 +6,7 @@ namespace LuckySpin.Repositories
 {
     public interface ISpinRepository
     {
+        public void AddSpin(Spin s);
         public IEnumerable<Spin> GetSpins();
     }
 }
